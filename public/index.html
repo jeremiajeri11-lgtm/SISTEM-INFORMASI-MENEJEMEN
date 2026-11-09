@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Demo dashboard Sistem Informasi Manajemen Inventaris Warung, terintegrasi dengan kasir."
+    />
+    <title>Ruang Stok — Inventaris Warung</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Lewati ke isi utama</a>
+
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Navigasi utama">
+        <a class="brand" href="#ringkasan" aria-label="Ruang Stok, beranda">
+          <span class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          <span class="brand-copy"><strong>ruang</strong><em>stok</em></span>
+        </a>
+
+        <nav class="primary-nav" aria-label="Menu inventaris">
+          <a class="nav-item active" href="#ringkasan" data-nav="ringkasan">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5v8.2a.8.8 0 0 1-.8.8H4.8a.8.8 0 0 1-.8-.8v-8.2Z"/><path d="M9 20.5v-6h6v6"/></svg>
+            <span>Ringkasan</span>
+          </a>
+          <a class="nav-item" href="#stok" data-nav="stok">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 8 4.3v9.4L12 21l-8-4.3V7.3L12 3Z"/><path d="m4.4 7.5L12 12l7.6-4.5M12 12v8.7"/></svg>
+            <span>Stok barang</span>
+          </a>
+          <a class="nav-item" href="#belanja" data-nav="belanja">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h2l1.7 10.1a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.5-1.2L20 8H7"/><circle cx="10" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg>
+            <span>Daftar belanja</span>
+            <b class="nav-count" id="navPurchaseCount">0</b>
+          </a>
+          <a class="nav-item" href="#kedaluwarsa" data-nav="kedaluwarsa">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M7 3v3m10-3v3M4.5 9h15M5.8 5h12.4A1.8 1.8 0 0 1 20 6.8v11.4A1.8 1.8 0 0 1 18.2 20H5.8A1.8 1.8 0 0 1 4 18.2V6.8A1.8 1.8 0 0 1 5.8 5Z"/><path d="m9 14 2 2 4-4"/></svg>
+            <span>Kedaluwarsa</span>
+            <b class="nav-count warm" id="navExpiryCount">0</b>
+          </a>
+          <a class="nav-item" href="#sinkronisasi" data-nav="sinkronisasi">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.2 8.5A7 7 0 0 1 18.8 6L20 7M4 17l1.2 1A7 7 0 0 0 17.8 15.5"/></svg>
+            <span>Riwayat POS</span>
+          </a>
+        </nav>
+
+        <div class="sidebar-foot">
+          <div class="cashier-status" aria-label="Status sistem kasir tersinkron">
+            <span class="pulse" aria-hidden="true"></span>
+            <div><small>Kasir Warung</small><strong>Tersinkron</strong></div>
+          </div>
+          <button class="quiet-button reset-button" type="button" id="resetDemo">
+            <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 11a8 8 0 1 0 2 5.3"/><path d="M20 4v7h-7"/></svg>
+            Reset data demo
+          </button>
+        </div>
+      </aside>
+
+      <main id="content" class="main-content">
+        <header class="topbar">
+          <div>
+            <p class="eyebrow"><span class="live-dot"></span>OPERASIONAL WARUNG · HARI INI</p>
+            <h1>Pagi, Mari cek warung.</h1>
+            <p class="today" id="todayLabel"></p>
+          </div>
+          <div class="topbar-actions">
+            <div class="sync-stamp" title="Sinkronisasi terakhir dengan kasir">
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.2 8.5A7 7 0 0 1 18.8 6L20 7M4 17l1.2 1A7 7 0 0 0 17.8 15.5"/></svg>
+              <span><small>POS terakhir</small><strong id="syncTime">baru saja</strong></span>
+            </div>
+            <button class="button button-ink" type="button" data-open-modal="newProduct">
+              <span aria-hidden="true">+</span> Barang baru
+            </button>
+          </div>
+        </header>
+
+        <section class="notice-strip" aria-label="Ringkasan sinkronisasi">
+          <span class="receipt-tear" aria-hidden="true"></span>
+          <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01"/><path d="M10.3 4.7 3.9 16a2 2 0 0 0 1.7 3h12.8a2 2 0 0 0 1.7-3L13.7 4.7a2 2 0 0 0-3.4 0Z"/></svg>
+          <p><strong id="noticeLead">Perlu perhatian:</strong> <span id="noticeText">menyiapkan data stok…</span></p>
+          <button type="button" class="link-button" id="noticeAction">Tinjau sekarang <span aria-hidden="true">→</span></button>
+        </section>
+
+        <section class="priority-grid" id="ringkasan" aria-labelledby="priorityTitle">
+          <article class="priority-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">PUSAT KEPUTUSAN</p>
+                <h2 id="priorityTitle">Prioritas hari ini</h2>
+              </div>
+              <span class="date-chip" id="dayChip">HARI INI</span>
+            </div>
+
+            <div class="priority-content">
+              <div class="priority-number"><strong id="priorityCount">0</strong><span>hal yang perlu<br />ditangani</span></div>
+              <div class="priority-list" id="priorityList" aria-live="polite"></div>
+            </div>
+
+            <footer class="priority-footer">
+              <p><span class="green-check">✓</span> Data kasir dan stok telah tersambung otomatis.</p>
+              <button class="button button-citrus" type="button" id="openPurchaseList">Buat daftar belanja <span aria-hidden="true">→</span></button>
+            </footer>
+          </article>
+
+          <article class="expiry-panel" id="kedaluwarsa" aria-labelledby="expiryHeading">
+            <div class="expiry-topline">
+              <span class="stamp">KONTROL BATCH</span>
+              <span class="mini-status">FEFO aktif</span>
+            </div>
+            <div>
+              <p class="eyebrow">KEDALUWARSA TERDEKAT</p>
+              <h2 id="expiryHeading"><span id="nearestExpiryDays">—</span> hari lagi</h2>
+              <p class="expiry-product" id="nearestExpiryProduct">Memeriksa batch produk…</p>
+            </div>
+            <div class="expiry-rule"></div>
+            <p class="expiry-note" id="expiryNote">Sistem memakai FEFO: produk dengan tanggal kedaluwarsa paling dekat disarankan keluar lebih dulu.</p>
+            <button class="link-button dark-link" type="button" id="openExpiryView">Lihat batch <span aria-hidden="true">→</span></button>
+          </article>
+        </section>
+
+        <section class="operations-layout">
+          <article class="stock-section" id="stok" aria-labelledby="stockHeading">
+            <div class="section-head">
+              <div>
+                <p class="eyebrow">STOK AKTIF</p>
+                <h2 id="stockHeading">Rak yang perlu kamu lihat</h2>
+              </div>
+              <div class="section-actions">
+                <button class="button button-outline" type="button" data-open-modal="receive">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg> Terima barang
+                </button>
+                <button class="button icon-label" type="button" id="openPosModal">
+                  <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 3h14v18H5zM8 7h8M8 11h2m4 0h2M8 15h2m4 0h2"/></svg>
+                  Simulasi kasir
+                </button>
+              </div>
+            </div>
+
+            <div class="filter-bar">
+              <label class="search-field">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg>
+                <span class="sr-only">Cari barang</span>
+                <input id="searchItems" type="search" placeholder="Cari nama atau SKU…" autocomplete="off" />
+              </label>
+              <label class="select-field">
+                <span class="sr-only">Filter status stok</span>
+                <select id="statusFilter">
+                  <option value="all">Semua kondisi</option>
+                  <option value="critical">Kritis</option>
+                  <option value="reorder">Perlu beli</option>
+                  <option value="safe">Aman</option>
+                </select>
+              </label>
+              <p class="item-count" id="itemCount">0 barang</p>
+            </div>
+
+            <div class="inventory-table-wrap">
+              <table class="inventory-table">
+                <thead>
+                  <tr>
+                    <th scope="col">Barang</th>
+                    <th scope="col">Rak stok</th>
+                    <th scope="col">Batas beli</th>
+                    <th scope="col">Batch / kedaluwarsa</th>
+                    <th scope="col"><span class="sr-only">Aksi</span></th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryRows"></tbody>
+              </table>
+              <div class="empty-state" id="emptyStock" hidden>
+                <span aria-hidden="true">⌕</span>
+                <p>Barang yang kamu cari belum ada di rak ini.</p>
+              </div>
+            </div>
+          </article>
+
+          <aside class="operations-aside">
+            <article class="health-panel" aria-labelledby="healthHeading">
+              <div class="health-header">
+                <div>
+                  <p class="eyebrow">PULSE INVENTARIS</p>
+                  <h2 id="healthHeading">Kesehatan stok</h2>
+                </div>
+                <button class="icon-button" type="button" id="healthInfo" aria-label="Informasi kesehatan stok">i</button>
+              </div>
+              <div class="health-content">
+                <div class="health-meter" aria-label="Skor kesehatan stok">
+                  <div><strong id="healthScore">0</strong><span>/100</span></div>
+                </div>
+                <div class="health-copy">
+                  <p id="healthText">Menghitung kondisi stok…</p>
+                  <ul id="healthLegend"></ul>
+                </div>
+              </div>
+              <p class="health-foot">Skor mempertimbangkan stok minimum dan batch yang masuk masa perhatian.</p>
+            </article>
+
+            <article class="cashier-panel" id="sinkronisasi" aria-labelledby="cashierHeading">
+              <div class="cashier-heading">
+                <div>
+                  <p class="eyebrow">ALIRAN KASIR</p>
+                  <h2 id="cashierHeading">Transaksi terakhir</h2>
+                </div>
+                <span class="connected-pill"><i></i> LIVE</span>
+              </div>
+              <ol class="activity-feed" id="activityFeed"></ol>
+              <button class="link-button dark-link full-link" type="button" id="viewPosHistory">Buka riwayat sinkronisasi <span aria-hidden="true">→</span></button>
+            </article>
+          </aside>
+        </section>
+      </main>
+    </div>
+
+    <nav class="mobile-nav" aria-label="Navigasi mobile">
+      <a class="active" href="#ringkasan" data-mobile-nav="ringkasan"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 11.5 12 4l8 7.5v8.2a.8.8 0 0 1-.8.8H4.8a.8.8 0 0 1-.8-.8v-8.2Z"/><path d="M9 20.5v-6h6v6"/></svg><span>Ringkas</span></a>
+      <a href="#stok" data-mobile-nav="stok"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="m12 3 8 4.3v9.4L12 21l-8-4.3V7.3L12 3Z"/><path d="m4.4 7.5L12 12l7.6-4.5M12 12v8.7"/></svg><span>Stok</span></a>
+      <button type="button" id="mobileReceive" aria-label="Terima barang"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v18M3 12h18"/></svg></button>
+      <a href="#belanja" data-mobile-nav="belanja"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M4 5h2l1.7 10.1a1.5 1.5 0 0 0 1.5 1.2h7.6a1.5 1.5 0 0 0 1.5-1.2L20 8H7"/><circle cx="10" cy="20" r="1"/><circle cx="17" cy="20" r="1"/></svg><span>Belanja</span></a>
+      <a href="#sinkronisasi" data-mobile-nav="sinkronisasi"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5"/><path d="M6.2 8.5A7 7 0 0 1 18.8 6L20 7M4 17l1.2 1A7 7 0 0 0 17.8 15.5"/></svg><span>Kasir</span></a>
+    </nav>
+
+    <div class="modal-backdrop" id="modalBackdrop" hidden></div>
+
+    <section class="modal" id="receiveModal" data-modal="receive" aria-labelledby="receiveTitle" aria-modal="true" role="dialog" hidden>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <div class="modal-heading">
+        <p class="eyebrow">PENERIMAAN STOK</p>
+        <h2 id="receiveTitle">Barang datang ke warung</h2>
+        <p>Stok akan bertambah, lalu sistem mengevaluasi ulang daftar pembelian dan batch.</p>
+      </div>
+      <form id="receiveForm" novalidate>
+        <div class="form-field">
+          <label for="receiveProduct">Barang <span aria-hidden="true">*</span></label>
+          <select id="receiveProduct" name="productId" required></select>
+          <small class="field-hint">Pilih SKU yang sudah terdaftar.</small>
+          <p class="field-error" data-error-for="receiveProduct"></p>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="receiveQuantity">Jumlah masuk <span aria-hidden="true">*</span></label>
+            <div class="input-suffix"><input id="receiveQuantity" name="quantity" type="number" min="1" step="1" inputmode="numeric" required /><span id="receiveUnit">pcs</span></div>
+            <p class="field-error" data-error-for="receiveQuantity"></p>
+          </div>
+          <div class="form-field">
+            <label for="receivePrice">Harga modal / satuan</label>
+            <div class="input-prefix"><span>Rp</span><input id="receivePrice" name="price" type="number" min="0" step="100" inputmode="decimal" /></div>
+            <p class="field-error" data-error-for="receivePrice"></p>
+          </div>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="receiveDate">Tanggal diterima <span aria-hidden="true">*</span></label>
+            <input id="receiveDate" name="receivedDate" type="date" required />
+            <p class="field-error" data-error-for="receiveDate"></p>
+          </div>
+          <div class="form-field" id="expiryField">
+            <label for="receiveExpiry">Kedaluwarsa <span class="optional-label">opsional</span></label>
+            <input id="receiveExpiry" name="expiryDate" type="date" />
+            <p class="field-error" data-error-for="receiveExpiry"></p>
+          </div>
+        </div>
+        <div class="form-field">
+          <label for="receiveBatch">Nomor batch</label>
+          <input id="receiveBatch" name="batch" type="text" placeholder="Contoh: B-2411" maxlength="24" />
+          <small class="field-hint">Wajib diisi jika produk memiliki tanggal kedaluwarsa.</small>
+          <p class="field-error" data-error-for="receiveBatch"></p>
+        </div>
+        <div class="validation-note"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01"/><path d="M10.3 4.7 3.9 16a2 2 0 0 0 1.7 3h12.8a2 2 0 0 0 1.7-3L13.7 4.7a2 2 0 0 0-3.4 0Z"/></svg><p>Validator akan menolak jumlah tidak bulat, harga negatif, dan tanggal kedaluwarsa sebelum tanggal penerimaan.</p></div>
+        <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Batal</button><button class="button button-ink" type="submit">Catat penerimaan <span aria-hidden="true">→</span></button></div>
+      </form>
+    </section>
+
+    <section class="modal" id="posModal" data-modal="pos" aria-labelledby="posTitle" aria-modal="true" role="dialog" hidden>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <div class="modal-heading pos-heading">
+        <span class="pos-tag"><i></i> KASIR TERHUBUNG</span>
+        <h2 id="posTitle">Masuknya transaksi kasir</h2>
+        <p>Simulasi ini memakai aturan stok nyata: SKU valid, jumlah tersedia, dan nomor nota hanya diproses sekali.</p>
+      </div>
+      <form id="posForm" novalidate>
+        <div class="form-field">
+          <label for="posProduct">Barang terjual <span aria-hidden="true">*</span></label>
+          <select id="posProduct" name="productId" required></select>
+          <small class="field-hint" id="posStockHint">Pilih barang untuk melihat stok yang siap dijual.</small>
+          <p class="field-error" data-error-for="posProduct"></p>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="posQuantity">Jumlah terjual <span aria-hidden="true">*</span></label>
+            <div class="input-suffix"><input id="posQuantity" name="quantity" type="number" min="1" step="1" inputmode="numeric" required /><span id="posUnit">pcs</span></div>
+            <p class="field-error" data-error-for="posQuantity"></p>
+          </div>
+          <div class="form-field">
+            <label for="receiptId">Nomor nota <span aria-hidden="true">*</span></label>
+            <input id="receiptId" name="receiptId" type="text" placeholder="POS-20261109-001" maxlength="32" required />
+            <p class="field-error" data-error-for="receiptId"></p>
+          </div>
+        </div>
+        <div class="pos-preview" id="posPreview"><span>ALUR FEFO</span><p>Batch dengan kedaluwarsa terdekat akan dikurangi lebih dulu.</p></div>
+        <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Batal</button><button class="button button-citrus" type="submit">Kirim dari kasir <span aria-hidden="true">→</span></button></div>
+      </form>
+    </section>
+
+    <section class="modal" id="newProductModal" data-modal="newProduct" aria-labelledby="newProductTitle" aria-modal="true" role="dialog" hidden>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <div class="modal-heading">
+        <p class="eyebrow">MASTER BARANG</p>
+        <h2 id="newProductTitle">Tambah barang baru</h2>
+        <p>Simpan identitas dan ambang stok agar sistem dapat memberi peringatan yang tepat.</p>
+      </div>
+      <form id="newProductForm" novalidate>
+        <div class="form-grid">
+          <div class="form-field"><label for="newSku">SKU <span aria-hidden="true">*</span></label><input id="newSku" name="sku" type="text" placeholder="MKN-XXX-001" maxlength="20" required /><p class="field-error" data-error-for="newSku"></p></div>
+          <div class="form-field"><label for="newUnit">Satuan <span aria-hidden="true">*</span></label><select id="newUnit" name="unit" required><option value="pcs">pcs</option><option value="botol">botol</option><option value="bungkus">bungkus</option><option value="kotak">kotak</option></select><p class="field-error" data-error-for="newUnit"></p></div>
+        </div>
+        <div class="form-field"><label for="newName">Nama barang <span aria-hidden="true">*</span></label><input id="newName" name="name" type="text" placeholder="Contoh: Kopi sachet" maxlength="48" required /><p class="field-error" data-error-for="newName"></p></div>
+        <div class="form-grid">
+          <div class="form-field"><label for="newStock">Stok awal <span aria-hidden="true">*</span></label><input id="newStock" name="stock" type="number" min="0" step="1" inputmode="numeric" value="0" required /><p class="field-error" data-error-for="newStock"></p></div>
+          <div class="form-field"><label for="newReorder">Batas beli <span aria-hidden="true">*</span></label><input id="newReorder" name="reorder" type="number" min="0" step="1" inputmode="numeric" required /><p class="field-error" data-error-for="newReorder"></p></div>
+        </div>
+        <div class="form-field"><label for="newTarget">Target stok <span aria-hidden="true">*</span></label><input id="newTarget" name="target" type="number" min="0" step="1" inputmode="numeric" required /><small class="field-hint">Target harus sama atau lebih besar daripada batas beli.</small><p class="field-error" data-error-for="newTarget"></p></div>
+        <label class="check-row"><input id="newPerishable" name="perishable" type="checkbox" /><span><strong>Produk memiliki kedaluwarsa</strong><small>Batch dan tanggal kedaluwarsa akan diwajibkan saat barang diterima.</small></span></label>
+        <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Batal</button><button class="button button-ink" type="submit">Simpan barang <span aria-hidden="true">→</span></button></div>
+      </form>
+    </section>
+
+    <section class="modal wide-modal" id="purchaseModal" data-modal="purchase" aria-labelledby="purchaseTitle" aria-modal="true" role="dialog" hidden>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <div class="modal-heading">
+        <p class="eyebrow">REKOMENDASI PEMBELIAN</p>
+        <h2 id="purchaseTitle">Daftar belanja yang perlu dikirim</h2>
+        <p>Jumlah saran mengisi celah dari stok saat ini menuju target stok setiap barang.</p>
+      </div>
+      <div class="purchase-summary" id="purchaseSummary"></div>
+      <div class="purchase-list" id="purchaseList"></div>
+      <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Tutup</button><button class="button button-ink" type="button" id="copyPurchase">Salin daftar <span aria-hidden="true">↗</span></button></div>
+    </section>
+
+    <section class="modal wide-modal" id="expiryModal" data-modal="expiry" aria-labelledby="expiryModalTitle" aria-modal="true" role="dialog" hidden>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <div class="modal-heading">
+        <p class="eyebrow">PERLINDUNGAN PRODUK</p>
+        <h2 id="expiryModalTitle">Batch yang perlu didahulukan</h2>
+        <p>Urut berdasarkan pendekatan <em>first-expired, first-out</em> (FEFO): barang dengan masa simpan terdekat keluar lebih dulu.</p>
+      </div>
+      <div class="expiry-list" id="expiryList"></div>
+      <div class="form-actions"><button class="button button-ink" type="button" data-close-modal>Selesai meninjau</button></div>
+    </section>
+
+    <section class="modal compact-modal" id="detailModal" data-modal="detail" aria-labelledby="detailTitle" aria-modal="true" role="dialog" hidden>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <div id="detailContent"></div>
+    </section>
+
+    <div class="toast-region" aria-live="polite" aria-atomic="true" id="toastRegion"></div>
+    <noscript><p class="noscript">Aplikasi demo ini perlu JavaScript untuk menghitung stok dan memvalidasi transaksi.</p></noscript>
+    <script src="app.js"></script>
+  </body>
+</html>
+

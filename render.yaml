@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: ruang-stok
+    runtime: node
+    # Disk persisten membutuhkan web service berbayar di Render.
+    plan: 0.5c-512mb
+    buildCommand: npm ci
+    startCommand: npm start
+    healthCheckPath: /api/health
+    disk:
+      name: ruang-stok-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
+
