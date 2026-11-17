@@ -1,5 +1,5 @@
 /*
- * Ruang Stok — prototipe frontend.
+ * Ruang Stok Ã¢â‚¬â€ prototipe frontend.
  * Semua data disimpan lokal pada browser untuk keperluan demonstrasi.
  */
 (function () {
@@ -165,7 +165,18 @@
     if (diff < 60) return `${diff} menit lalu`;
     return `${Math.floor(diff / 60)} jam lalu`;
   };
-  async function requestApi(url, options = {}) {
+  function setSubmitting(formId, isLoading) {
+    isSubmitting[formId] = isLoading;
+    const form = $("#" + formId + "Form");
+    if (!form) return;
+    const submitBtn = form.querySelector("button[type=submit]");
+    if (submitBtn) {
+      submitBtn.disabled = isLoading;
+      submitBtn.dataset.loading = isLoading;
+    }
+  }
+
+async function requestApi(url, options = {}) {
     const response = await fetch(url, {
       ...options,
       headers: { "Content-Type": "application/json", ...(options.headers || {}) }
@@ -198,8 +209,8 @@
     const purchaseItems = getPurchaseItems();
     const expiryItems = getExpiringBatches(true);
     const problems = [
-      ...purchaseItems.map((product) => ({ type: stockStatus(product), product, text: `${product.name} · ${statusVerb(stockStatus(product))}`, meta: `${formatNumber(availableStock(product))}/${formatNumber(product.reorder)} ${product.unit}` })),
-      ...expiryItems.map((entry) => ({ type: "warning", product: entry.product, text: `${entry.product.name} · ${entry.days === 0 ? "kedaluwarsa hari ini" : `${entry.days} hari lagi`}`, meta: `batch ${entry.batch.id}` }))
+      ...purchaseItems.map((product) => ({ type: stockStatus(product), product, text: `${product.name} Ã‚Â· ${statusVerb(stockStatus(product))}`, meta: `${formatNumber(availableStock(product))}/${formatNumber(product.reorder)} ${product.unit}` })),
+      ...expiryItems.map((entry) => ({ type: "warning", product: entry.product, text: `${entry.product.name} Ã‚Â· ${entry.days === 0 ? "kedaluwarsa hari ini" : `${entry.days} hari lagi`}`, meta: `batch ${entry.batch.id}` }))
     ];
     $("#priorityCount").textContent = problems.length;
     $("#priorityList").innerHTML = problems.length
@@ -211,7 +222,7 @@
     if (expiryItems.length) noticeText.push(`${expiryItems.length} batch perlu diprioritaskan jual`);
     $("#noticeLead").textContent = noticeText.length ? "Perlu perhatian:" : "Kondisi stabil:";
     $("#noticeText").textContent = noticeText.length ? `${noticeText.join(" dan ")}.` : "stok dan batch sudah berada dalam batas aman.";
-    $("#noticeAction").textContent = noticeText.length ? "Tinjau sekarang →" : "Lihat stok →";
+    $("#noticeAction").textContent = noticeText.length ? "Tinjau sekarang Ã¢â€ â€™" : "Lihat stok Ã¢â€ â€™";
     $("#noticeAction").dataset.target = purchaseItems.length ? "purchase" : "stock";
   }
 
@@ -225,7 +236,7 @@
     }
     const daysText = nearest.days === 0 ? "Hari ini" : nearest.days;
     $("#nearestExpiryDays").textContent = daysText;
-    $("#nearestExpiryProduct").textContent = `${nearest.product.name} · batch ${nearest.batch.id}`;
+    $("#nearestExpiryProduct").textContent = `${nearest.product.name} Ã‚Â· batch ${nearest.batch.id}`;
     $("#expiryNote").textContent = nearest.days <= 7
       ? `Sisa ${nearest.days === 0 ? "hari ini" : `${nearest.days} hari`}. Utamakan produk ini di area kasir atau beri promo.`
       : `Batch ini masih aman, tetapi tetap akan diproses dengan aturan FEFO.`;
@@ -260,8 +271,8 @@
         <td><div class="product-cell">${productSymbol(product)}<div><span class="product-name">${escapeHtml(product.name)}</span><span class="product-sku">${escapeHtml(product.sku)}</span></div></div></td>
         <td><div class="stock-rail"><div class="stock-topline"><strong>${formatNumber(stock)}</strong><small>${escapeHtml(product.unit)}</small></div><div class="rack-line ${status}">${Array.from({ length: segments }, (_, index) => `<b class="${index < filled ? "filled" : ""}"></b>`).join("")}</div></div></td>
         <td><div class="reorder-cell"><b>${formatNumber(product.reorder)} ${escapeHtml(product.unit)}</b>${statusLabel(status)}</div></td>
-        <td><div class="batch-cell">${firstBatch ? `<span class="batch-code">${escapeHtml(firstBatch.id)}</span>` : "<span class=\"batch-code\">—</span>"}${expiryLabel}</div></td>
-        <td><button class="detail-button" type="button" data-detail="${escapeHtml(product.id)}">Rincian →</button></td>
+        <td><div class="batch-cell">${firstBatch ? `<span class="batch-code">${escapeHtml(firstBatch.id)}</span>` : "<span class=\"batch-code\">Ã¢â‚¬â€</span>"}${expiryLabel}</div></td>
+        <td><button class="detail-button" type="button" data-detail="${escapeHtml(product.id)}">Rincian Ã¢â€ â€™</button></td>
       </tr>`;
     }).join("");
     $("#emptyStock").hidden = filtered.length > 0;
@@ -286,7 +297,7 @@
       const descriptor = event.kind === "sale"
         ? `Kasir menjual <span>${formatNumber(event.quantity)} ${escapeHtml(event.unit)}</span> ${escapeHtml(event.product)}`
         : `Barang masuk <span>${formatNumber(event.quantity)} ${escapeHtml(event.unit)}</span> ${escapeHtml(event.product)}`;
-      return `<li class="${event.kind === "receive" ? "incoming" : ""}"><time>${escapeHtml(event.at)} · ${escapeHtml(event.receipt)}</time><p>${descriptor}</p></li>`;
+      return `<li class="${event.kind === "receive" ? "incoming" : ""}"><time>${escapeHtml(event.at)} Ã‚Â· ${escapeHtml(event.receipt)}</time><p>${descriptor}</p></li>`;
     }).join("");
   }
 
@@ -295,10 +306,10 @@
     const selectedPos = $("#posProduct").value;
     const options = state.products
       .sort((a, b) => a.name.localeCompare(b.name, "id"))
-      .map((product) => `<option value="${escapeHtml(product.id)}">${escapeHtml(product.name)} · ${escapeHtml(product.sku)}</option>`)
+      .map((product) => `<option value="${escapeHtml(product.id)}">${escapeHtml(product.name)} Ã‚Â· ${escapeHtml(product.sku)}</option>`)
       .join("");
-    $("#receiveProduct").innerHTML = `<option value="">Pilih barang…</option>${options}`;
-    $("#posProduct").innerHTML = `<option value="">Pilih barang…</option>${options}`;
+    $("#receiveProduct").innerHTML = `<option value="">Pilih barangÃ¢â‚¬Â¦</option>${options}`;
+    $("#posProduct").innerHTML = `<option value="">Pilih barangÃ¢â‚¬Â¦</option>${options}`;
     if (getProduct(selectedReceive)) $("#receiveProduct").value = selectedReceive;
     if (getProduct(selectedPos)) $("#posProduct").value = selectedPos;
     updateReceiveProductMeta();
@@ -348,7 +359,7 @@
     $("#purchaseList").innerHTML = items.length
       ? items.map((product) => {
           const suggested = Math.max(0, product.target - availableStock(product));
-          return `<label class="purchase-row"><input class="purchase-toggle" type="checkbox" checked data-purchase="${escapeHtml(product.id)}" /><span><strong>${escapeHtml(product.name)}</strong><small>${formatNumber(availableStock(product))} sekarang · target ${formatNumber(product.target)} ${escapeHtml(product.unit)}</small></span><span class="purchase-quantity">+${formatNumber(suggested)} ${escapeHtml(product.unit)}</span></label>`;
+          return `<label class="purchase-row"><input class="purchase-toggle" type="checkbox" checked data-purchase="${escapeHtml(product.id)}" /><span><strong>${escapeHtml(product.name)}</strong><small>${formatNumber(availableStock(product))} sekarang Ã‚Â· target ${formatNumber(product.target)} ${escapeHtml(product.unit)}</small></span><span class="purchase-quantity">+${formatNumber(suggested)} ${escapeHtml(product.unit)}</span></label>`;
         }).join("")
       : `<p style="margin:10px 0;color:#69736d;font-size:11px">Tidak ada rekomendasi belanja saat ini.</p>`;
   }
@@ -358,7 +369,7 @@
     $("#expiryList").innerHTML = items.length
       ? items.map(({ product, batch, days }) => {
           const action = days <= 1 ? "Taruh di depan kasir" : days <= 7 ? "Utamakan penjualan" : "Pantau rutin";
-          return `<div class="expiry-row"><span class="days">${days === 0 ? "H" : days}</span><div><strong>${escapeHtml(product.name)}</strong><small>batch ${escapeHtml(batch.id)} · ${formatNumber(batch.qty)} ${escapeHtml(product.unit)} · ${formatDate(batch.expiryAt)}</small></div><span class="expiry-action">${action}</span></div>`;
+          return `<div class="expiry-row"><span class="days">${days === 0 ? "H" : days}</span><div><strong>${escapeHtml(product.name)}</strong><small>batch ${escapeHtml(batch.id)} Ã‚Â· ${formatNumber(batch.qty)} ${escapeHtml(product.unit)} Ã‚Â· ${formatDate(batch.expiryAt)}</small></div><span class="expiry-action">${action}</span></div>`;
         }).join("")
       : `<p style="margin:10px 0;color:#69736d;font-size:11px">Belum ada batch aktif yang memiliki tanggal kedaluwarsa.</p>`;
   }
@@ -371,21 +382,21 @@
       return daysUntil(a.expiryAt) - daysUntil(b.expiryAt);
     });
     $("#detailContent").innerHTML = `
-      <p class="detail-kicker">RINCIAN RAK · ${escapeHtml(product.unit.toUpperCase())}</p>
+      <p class="detail-kicker">RINCIAN RAK Ã‚Â· ${escapeHtml(product.unit.toUpperCase())}</p>
       <h2 id="detailTitle" class="detail-title">${escapeHtml(product.name)}</h2>
       <p class="detail-sku">${escapeHtml(product.sku)}</p>
-      <span class="detail-status ${status}">${statusLabel(status)} · ${statusVerb(status)}</span>
+      <span class="detail-status ${status}">${statusLabel(status)} Ã‚Â· ${statusVerb(status)}</span>
       <div class="detail-stat-grid">
         <div class="detail-stat"><small>SIAP JUAL</small><strong>${formatNumber(availableStock(product))}</strong></div>
         <div class="detail-stat"><small>BATAS BELI</small><strong>${formatNumber(product.reorder)}</strong></div>
         <div class="detail-stat"><small>TARGET</small><strong>${formatNumber(product.target)}</strong></div>
       </div>
-      <p class="detail-section-title">BATCH TERSIMPAN ${product.perishable ? "· FEFO" : ""}</p>
+      <p class="detail-section-title">BATCH TERSIMPAN ${product.perishable ? "Ã‚Â· FEFO" : ""}</p>
       ${batches.length ? batches.map((batch) => {
         const days = batch.expiryAt ? daysUntil(batch.expiryAt) : null;
         const label = days === null ? "Tidak dibatasi" : days < 0 ? "Kedaluwarsa" : days === 0 ? "Hari ini" : `${days} hari lagi`;
         const warning = days !== null && days <= 7 ? "warn" : "";
-        return `<div class="detail-batch"><div><strong>${escapeHtml(batch.id)}</strong><small>${formatNumber(batch.qty)} ${escapeHtml(product.unit)} · masuk ${formatDate(batch.receivedAt)}</small></div><span class="${warning}">${label}</span></div>`;
+        return `<div class="detail-batch"><div><strong>${escapeHtml(batch.id)}</strong><small>${formatNumber(batch.qty)} ${escapeHtml(product.unit)} Ã‚Â· masuk ${formatDate(batch.receivedAt)}</small></div><span class="${warning}">${label}</span></div>`;
       }).join("") : `<p style="color:#69736d;font-size:11px">Belum ada batch dengan stok tersedia.</p>`}
     `;
   }
@@ -458,6 +469,7 @@
     if (product?.perishable && !expiryDate) { setError("receiveExpiry", "Produk ini wajib memiliki tanggal kedaluwarsa."); invalid = true; }
     if (expiryDate && receivedDate && startOfDay(expiryDate) <= startOfDay(receivedDate)) { setError("receiveExpiry", "Tanggal kedaluwarsa harus setelah tanggal penerimaan."); invalid = true; }
     if (product?.perishable && !batchId) { setError("receiveBatch", "Nomor batch wajib diisi untuk produk ini."); invalid = true; }
+    if (batchId && !/^[A-Za-z0-9-]+$/.test(batchId)) { setError("receiveBatch", "Batch ID hanya boleh menggunakan huruf, angka, dan tanda hubung."); invalid = true; }
     if (invalid) {
       showToast("Penerimaan belum dicatat", "Periksa kolom yang diberi tanda merah.", "error");
       return;
@@ -531,7 +543,7 @@
     const target = Number($("#newTarget").value);
     const perishable = $("#newPerishable").checked;
     let invalid = false;
-    if (!/^[A-Z0-9-]{3,20}$/.test(sku)) { setError("newSku", "SKU gunakan 3–20 karakter: huruf, angka, atau tanda hubung."); invalid = true; }
+    if (!/^[A-Z0-9-]{3,20}$/.test(sku)) { setError("newSku", "SKU gunakan 3Ã¢â‚¬â€œ20 karakter: huruf, angka, atau tanda hubung."); invalid = true; }
     else if (state.products.some((product) => product.sku === sku)) { setError("newSku", "SKU sudah terdaftar; gunakan kode yang unik."); invalid = true; }
     if (!name || name.length < 3) { setError("newName", "Nama barang minimal 3 karakter."); invalid = true; }
     if (!validInteger(stock)) { setError("newStock", "Stok awal harus bilangan bulat 0 atau lebih."); invalid = true; }
@@ -559,7 +571,7 @@
   async function copyPurchaseList() {
     const items = getPurchaseItems();
     const text = items.length
-      ? ["DAFTAR BELANJA — RUANG STOK", ...items.map((product) => `• ${product.name}: +${Math.max(0, product.target - availableStock(product))} ${product.unit} (stok ${availableStock(product)}, target ${product.target})`)].join("\n")
+      ? ["DAFTAR BELANJA Ã¢â‚¬â€ RUANG STOK", ...items.map((product) => `Ã¢â‚¬Â¢ ${product.name}: +${Math.max(0, product.target - availableStock(product))} ${product.unit} (stok ${availableStock(product)}, target ${product.target})`)].join("\n")
       : "Tidak ada barang yang perlu dibeli.";
     try {
       await navigator.clipboard.writeText(text);
@@ -631,4 +643,5 @@
   wireEvents();
   refreshDashboard({ quiet: true });
 })();
+
 
