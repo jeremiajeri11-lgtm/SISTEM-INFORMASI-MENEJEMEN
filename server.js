@@ -1,4 +1,4 @@
-import express from "express";
+﻿import express from "express";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { createDemoData, mutateData, readData, resetDemoData } from "./src/store.js";
@@ -57,7 +57,7 @@ function stockSnapshot(data) {
 function requireString(value, field, { min = 1, max = 80, pattern } = {}) {
   if (typeof value !== "string") throw appError(`${field} wajib berupa teks.`);
   const result = value.trim();
-  if (result.length < min || result.length > max) throw appError(`${field} harus berisi ${min}–${max} karakter.`);
+  if (result.length < min || result.length > max) throw appError(`${field} harus berisi ${min}â€“${max} karakter.`);
   if (pattern && !pattern.test(result)) throw appError(`${field} memiliki format tidak valid.`);
   return result;
 }
@@ -132,9 +132,9 @@ app.get("/api/products/:id", async (request, response, next) => {
 app.post("/api/products", async (request, response, next) => {
   try {
     const { data, result } = await mutateData((data) => {
-      const sku = requireString(request.body.sku, "SKU", { min: 3, max: 20, pattern: /^[A-Za-z0-9-]+$/ }).toUpperCase();
+      const sku = requireString(request.body.sku, "SKU", { min: 3, max: 20, pattern: /^[A-Z0-9-]+$/ }).toUpperCase();
       const name = requireString(request.body.name, "Nama barang", { min: 3, max: 48 });
-      const unit = requireString(request.body.unit, "Satuan", { min: 2, max: 20 });
+      const unit = requireString(request.body.unit, "Satuan", { min: 2, max: 20 }); const validUnits = ["pcs", "botol", "bungkus", "kotak"]; if (!validUnits.includes(unit)) throw appError("Satuan harus salah satu dari: pcs, botol, bungkus, kotak.");
       const reorder = requireNonNegativeInteger(request.body.reorder, "Batas beli");
       const target = requireNonNegativeInteger(request.body.target, "Target stok");
       const openingStock = requireNonNegativeInteger(request.body.stock, "Stok awal");
@@ -246,4 +246,3 @@ app.use((error, _request, response, _next) => {
 });
 
 app.listen(port, () => console.log(`Ruang Stok berjalan di http://localhost:${port}`));
-

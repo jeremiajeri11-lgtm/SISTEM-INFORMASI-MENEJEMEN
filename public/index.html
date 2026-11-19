@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
@@ -7,7 +7,7 @@
       name="description"
       content="Demo dashboard Sistem Informasi Manajemen Inventaris Warung, terintegrasi dengan kasir."
     />
-    <title>Ruang Stok — Inventaris Warung</title>
+    <title>Ruang Stok â€” Inventaris Warung</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -62,7 +62,7 @@
       <main id="content" class="main-content">
         <header class="topbar">
           <div>
-            <p class="eyebrow"><span class="live-dot"></span>OPERASIONAL WARUNG · HARI INI</p>
+            <p class="eyebrow"><span class="live-dot"></span>OPERASIONAL WARUNG Â· HARI INI</p>
             <h1>Pagi, Mari cek warung.</h1>
             <p class="today" id="todayLabel"></p>
           </div>
@@ -80,8 +80,8 @@
         <section class="notice-strip" aria-label="Ringkasan sinkronisasi">
           <span class="receipt-tear" aria-hidden="true"></span>
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01"/><path d="M10.3 4.7 3.9 16a2 2 0 0 0 1.7 3h12.8a2 2 0 0 0 1.7-3L13.7 4.7a2 2 0 0 0-3.4 0Z"/></svg>
-          <p><strong id="noticeLead">Perlu perhatian:</strong> <span id="noticeText">menyiapkan data stok…</span></p>
-          <button type="button" class="link-button" id="noticeAction">Tinjau sekarang <span aria-hidden="true">→</span></button>
+          <p><strong id="noticeLead">Perlu perhatian:</strong> <span id="noticeText">menyiapkan data stokâ€¦</span></p>
+          <button type="button" class="link-button" id="noticeAction">Tinjau sekarang <span aria-hidden="true">â†’</span></button>
         </section>
 
         <section class="priority-grid" id="ringkasan" aria-labelledby="priorityTitle">
@@ -100,8 +100,8 @@
             </div>
 
             <footer class="priority-footer">
-              <p><span class="green-check">✓</span> Data kasir dan stok telah tersambung otomatis.</p>
-              <button class="button button-citrus" type="button" id="openPurchaseList">Buat daftar belanja <span aria-hidden="true">→</span></button>
+              <p><span class="green-check">âœ“</span> Data kasir dan stok telah tersambung otomatis.</p>
+              <button class="button button-citrus" type="button" id="openPurchaseList">Buat daftar belanja <span aria-hidden="true">â†’</span></button>
             </footer>
           </article>
 
@@ -112,12 +112,12 @@
             </div>
             <div>
               <p class="eyebrow">KEDALUWARSA TERDEKAT</p>
-              <h2 id="expiryHeading"><span id="nearestExpiryDays">—</span> hari lagi</h2>
-              <p class="expiry-product" id="nearestExpiryProduct">Memeriksa batch produk…</p>
+              <h2 id="expiryHeading"><span id="nearestExpiryDays">â€”</span> hari lagi</h2>
+              <p class="expiry-product" id="nearestExpiryProduct">Memeriksa batch produkâ€¦</p>
             </div>
             <div class="expiry-rule"></div>
             <p class="expiry-note" id="expiryNote">Sistem memakai FEFO: produk dengan tanggal kedaluwarsa paling dekat disarankan keluar lebih dulu.</p>
-            <button class="link-button dark-link" type="button" id="openExpiryView">Lihat batch <span aria-hidden="true">→</span></button>
+            <button class="link-button dark-link" type="button" id="openExpiryView">Lihat batch <span aria-hidden="true">â†’</span></button>
           </article>
         </section>
 
@@ -143,7 +143,7 @@
               <label class="search-field">
                 <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"/><path d="m16 16 4 4"/></svg>
                 <span class="sr-only">Cari barang</span>
-                <input id="searchItems" type="search" placeholder="Cari nama atau SKU…" autocomplete="off" />
+                <input id="searchItems" type="search" placeholder="Cari nama atau SKUâ€¦" autocomplete="off" />
               </label>
               <label class="select-field">
                 <span class="sr-only">Filter status stok</span>
@@ -171,7 +171,7 @@
                 <tbody id="inventoryRows"></tbody>
               </table>
               <div class="empty-state" id="emptyStock" hidden>
-                <span aria-hidden="true">⌕</span>
+                <span aria-hidden="true">âŒ•</span>
                 <p>Barang yang kamu cari belum ada di rak ini.</p>
               </div>
             </div>
@@ -191,7 +191,7 @@
                   <div><strong id="healthScore">0</strong><span>/100</span></div>
                 </div>
                 <div class="health-copy">
-                  <p id="healthText">Menghitung kondisi stok…</p>
+                  <p id="healthText">Menghitung kondisi stokâ€¦</p>
                   <ul id="healthLegend"></ul>
                 </div>
               </div>
@@ -207,7 +207,7 @@
                 <span class="connected-pill"><i></i> LIVE</span>
               </div>
               <ol class="activity-feed" id="activityFeed"></ol>
-              <button class="link-button dark-link full-link" type="button" id="viewPosHistory">Buka riwayat sinkronisasi <span aria-hidden="true">→</span></button>
+              <button class="link-button dark-link full-link" type="button" id="viewPosHistory">Buka riwayat sinkronisasi <span aria-hidden="true">â†’</span></button>
             </article>
           </aside>
         </section>
@@ -225,7 +225,7 @@
     <div class="modal-backdrop" id="modalBackdrop" hidden></div>
 
     <section class="modal" id="receiveModal" data-modal="receive" aria-labelledby="receiveTitle" aria-modal="true" role="dialog" hidden>
-      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">Ã—</button>
       <div class="modal-heading">
         <p class="eyebrow">PENERIMAAN STOK</p>
         <h2 id="receiveTitle">Barang datang ke warung</h2>
@@ -264,17 +264,17 @@
         </div>
         <div class="form-field">
           <label for="receiveBatch">Nomor batch</label>
-          <input id="receiveBatch" name="batch" type="text" placeholder="Contoh: B-2411" maxlength="24" />
+          <input id="receiveBatch" name="batch" type="text" placeholder="Contoh: B-2411" minlength="1" maxlength="24" pattern="[A-Za-z0-9-]+" title="Batch ID hanya boleh menggunakan huruf, angka, dan tanda hubung" />
           <small class="field-hint">Wajib diisi jika produk memiliki tanggal kedaluwarsa.</small>
           <p class="field-error" data-error-for="receiveBatch"></p>
         </div>
         <div class="validation-note"><svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 8v4m0 4h.01"/><path d="M10.3 4.7 3.9 16a2 2 0 0 0 1.7 3h12.8a2 2 0 0 0 1.7-3L13.7 4.7a2 2 0 0 0-3.4 0Z"/></svg><p>Validator akan menolak jumlah tidak bulat, harga negatif, dan tanggal kedaluwarsa sebelum tanggal penerimaan.</p></div>
-        <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Batal</button><button class="button button-ink" type="submit">Catat penerimaan <span aria-hidden="true">→</span></button></div>
+        <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Batal</button><button class="button button-ink" type="submit">Catat penerimaan <span aria-hidden="true">â†’</span></button></div>
       </form>
     </section>
 
     <section class="modal" id="posModal" data-modal="pos" aria-labelledby="posTitle" aria-modal="true" role="dialog" hidden>
-      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">Ã—</button>
       <div class="modal-heading pos-heading">
         <span class="pos-tag"><i></i> KASIR TERHUBUNG</span>
         <h2 id="posTitle">Masuknya transaksi kasir</h2>
@@ -295,17 +295,17 @@
           </div>
           <div class="form-field">
             <label for="receiptId">Nomor nota <span aria-hidden="true">*</span></label>
-            <input id="receiptId" name="receiptId" type="text" placeholder="POS-20261109-001" maxlength="32" required />
+            <input id="receiptId" name="receiptId" type="text" placeholder="POS-20261109-001" minlength="3" maxlength="32" pattern="[A-Z0-9-]+" title="Nomor nota hanya boleh menggunakan huruf besar, angka, dan tanda hubung" required />
             <p class="field-error" data-error-for="receiptId"></p>
           </div>
         </div>
         <div class="pos-preview" id="posPreview"><span>ALUR FEFO</span><p>Batch dengan kedaluwarsa terdekat akan dikurangi lebih dulu.</p></div>
-        <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Batal</button><button class="button button-citrus" type="submit">Kirim dari kasir <span aria-hidden="true">→</span></button></div>
+        <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Batal</button><button class="button button-citrus" type="submit">Kirim dari kasir <span aria-hidden="true">â†’</span></button></div>
       </form>
     </section>
 
     <section class="modal" id="newProductModal" data-modal="newProduct" aria-labelledby="newProductTitle" aria-modal="true" role="dialog" hidden>
-      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">Ã—</button>
       <div class="modal-heading">
         <p class="eyebrow">MASTER BARANG</p>
         <h2 id="newProductTitle">Tambah barang baru</h2>
@@ -313,7 +313,7 @@
       </div>
       <form id="newProductForm" novalidate>
         <div class="form-grid">
-          <div class="form-field"><label for="newSku">SKU <span aria-hidden="true">*</span></label><input id="newSku" name="sku" type="text" placeholder="MKN-XXX-001" maxlength="20" required /><p class="field-error" data-error-for="newSku"></p></div>
+          <div class="form-field"><label for="newSku">SKU <span aria-hidden="true">*</span></label><input id="newSku" name="sku" type="text" placeholder="MKN-XXX-001" minlength="3" maxlength="20" pattern="[A-Z0-9-]+" title="SKU hanya boleh menggunakan huruf besar, angka, dan tanda hubung" required /><p class="field-error" data-error-for="newSku"></p></div>
           <div class="form-field"><label for="newUnit">Satuan <span aria-hidden="true">*</span></label><select id="newUnit" name="unit" required><option value="pcs">pcs</option><option value="botol">botol</option><option value="bungkus">bungkus</option><option value="kotak">kotak</option></select><p class="field-error" data-error-for="newUnit"></p></div>
         </div>
         <div class="form-field"><label for="newName">Nama barang <span aria-hidden="true">*</span></label><input id="newName" name="name" type="text" placeholder="Contoh: Kopi sachet" maxlength="48" required /><p class="field-error" data-error-for="newName"></p></div>
@@ -323,12 +323,12 @@
         </div>
         <div class="form-field"><label for="newTarget">Target stok <span aria-hidden="true">*</span></label><input id="newTarget" name="target" type="number" min="0" step="1" inputmode="numeric" required /><small class="field-hint">Target harus sama atau lebih besar daripada batas beli.</small><p class="field-error" data-error-for="newTarget"></p></div>
         <label class="check-row"><input id="newPerishable" name="perishable" type="checkbox" /><span><strong>Produk memiliki kedaluwarsa</strong><small>Batch dan tanggal kedaluwarsa akan diwajibkan saat barang diterima.</small></span></label>
-        <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Batal</button><button class="button button-ink" type="submit">Simpan barang <span aria-hidden="true">→</span></button></div>
+        <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Batal</button><button class="button button-ink" type="submit">Simpan barang <span aria-hidden="true">â†’</span></button></div>
       </form>
     </section>
 
     <section class="modal wide-modal" id="purchaseModal" data-modal="purchase" aria-labelledby="purchaseTitle" aria-modal="true" role="dialog" hidden>
-      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">Ã—</button>
       <div class="modal-heading">
         <p class="eyebrow">REKOMENDASI PEMBELIAN</p>
         <h2 id="purchaseTitle">Daftar belanja yang perlu dikirim</h2>
@@ -336,11 +336,11 @@
       </div>
       <div class="purchase-summary" id="purchaseSummary"></div>
       <div class="purchase-list" id="purchaseList"></div>
-      <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Tutup</button><button class="button button-ink" type="button" id="copyPurchase">Salin daftar <span aria-hidden="true">↗</span></button></div>
+      <div class="form-actions"><button class="button button-ghost" type="button" data-close-modal>Tutup</button><button class="button button-ink" type="button" id="copyPurchase">Salin daftar <span aria-hidden="true">â†—</span></button></div>
     </section>
 
     <section class="modal wide-modal" id="expiryModal" data-modal="expiry" aria-labelledby="expiryModalTitle" aria-modal="true" role="dialog" hidden>
-      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">Ã—</button>
       <div class="modal-heading">
         <p class="eyebrow">PERLINDUNGAN PRODUK</p>
         <h2 id="expiryModalTitle">Batch yang perlu didahulukan</h2>
@@ -351,7 +351,7 @@
     </section>
 
     <section class="modal compact-modal" id="detailModal" data-modal="detail" aria-labelledby="detailTitle" aria-modal="true" role="dialog" hidden>
-      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">×</button>
+      <button class="modal-close" type="button" data-close-modal aria-label="Tutup dialog">Ã—</button>
       <div id="detailContent"></div>
     </section>
 
@@ -360,4 +360,3 @@
     <script src="app.js"></script>
   </body>
 </html>
-
